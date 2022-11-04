@@ -5,46 +5,51 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using SALT_PEPER.Models;
+using SALT_PEPER.ENTIDADES;
+using SALT_PEPER.NEGOCIO;
 
 namespace SALT_PEPER.Controllers
 {
     public class UnidadMedidaController : Controller
     {
-        private readonly FAST_FOOD_DBContext _context;
+        private readonly UnidadesMedidaBAL _context;
+       
 
-        public UnidadMedidaController(FAST_FOOD_DBContext context)
+        public UnidadMedidaController()
         {
-            _context = context;
+            _context = new UnidadesMedidaBAL();
+       
         }
 
         // GET: UnidadMedida
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblUnidadMedida.ToListAsync());
+            ViewBag.Titulo = "Unidad de medida";
+            return View(_context.GetAll());
         }
 
         // GET: UnidadMedida/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var tblUnidadMedida = await _context.TblUnidadMedida
-                .FirstOrDefaultAsync(m => m.Pk == id);
+            var tblUnidadMedida = _context.GetById(id);
+               
             if (tblUnidadMedida == null)
             {
                 return NotFound();
             }
-
+            ViewBag.Titulo = "Unidad de medida";
             return View(tblUnidadMedida);
         }
 
         // GET: UnidadMedida/Create
         public IActionResult Create()
         {
+            ViewBag.Titulo = "Unidad de medida";
             return View();
         }
 
@@ -57,26 +62,26 @@ namespace SALT_PEPER.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblUnidadMedida);
-                await _context.SaveChangesAsync();
+                var x = _context.Add(tblUnidadMedida);
                 return RedirectToAction(nameof(Index));
             }
             return View(tblUnidadMedida);
         }
 
         // GET: UnidadMedida/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var tblUnidadMedida = await _context.TblUnidadMedida.FindAsync(id);
+            var tblUnidadMedida = _context.GetById(id);
             if (tblUnidadMedida == null)
             {
                 return NotFound();
             }
+            ViewBag.Titulo = "Unidad de medida";
             return View(tblUnidadMedida);
         }
 
@@ -97,7 +102,6 @@ namespace SALT_PEPER.Controllers
                 try
                 {
                     _context.Update(tblUnidadMedida);
-                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,19 +120,20 @@ namespace SALT_PEPER.Controllers
         }
 
         // GET: UnidadMedida/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var tblUnidadMedida = await _context.TblUnidadMedida
-                .FirstOrDefaultAsync(m => m.Pk == id);
+            var tblUnidadMedida =  _context.GetById(id);
+            
             if (tblUnidadMedida == null)
             {
                 return NotFound();
             }
+            ViewBag.Titulo = "Unidad de medida";
 
             return View(tblUnidadMedida);
         }
@@ -138,15 +143,15 @@ namespace SALT_PEPER.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblUnidadMedida = await _context.TblUnidadMedida.FindAsync(id);
-            _context.TblUnidadMedida.Remove(tblUnidadMedida);
-            await _context.SaveChangesAsync();
+            var tblUnidadMedida = _context.GetById(id);
+            _context.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool TblUnidadMedidaExists(int id)
         {
-            return _context.TblUnidadMedida.Any(e => e.Pk == id);
+            var exist = _context.GetById(id);
+            return (exist != null) ? true : false;
         }
     }
 }

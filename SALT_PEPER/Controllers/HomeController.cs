@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using SALT_PEPER.Models;
+using SALT_PEPER.ENTIDADES;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,6 +20,7 @@ namespace SALT_PEPER.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Titulo = "Inicio";
             return View();
         }
 

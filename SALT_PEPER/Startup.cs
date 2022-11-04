@@ -8,7 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SALT_PEPER.Data;
-using SALT_PEPER.Models;
+using SALT_PEPER.ENTIDADES;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;

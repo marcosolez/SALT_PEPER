@@ -5,46 +5,48 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using SALT_PEPER.Models;
+using SALT_PEPER.ENTIDADES;
+using SALT_PEPER.NEGOCIO;
 
 namespace SALT_PEPER.Controllers
 {
     public class ProveedorsController : Controller
     {
-        private readonly FAST_FOOD_DBContext _context;
+        private readonly ProveedoresBAL _context;
 
-        public ProveedorsController(FAST_FOOD_DBContext context)
+        public ProveedorsController()
         {
-            _context = context;
+            _context = new ProveedoresBAL();
         }
 
         // GET: Proveedors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.TblProveedor.ToListAsync());
+            ViewBag.Titulo = "Proveedores";
+            return View(_context.GetAll());
         }
 
         // GET: Proveedors/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var tblProveedor = await _context.TblProveedor
-                .FirstOrDefaultAsync(m => m.Pk == id);
+            var tblProveedor =  _context.GetById(id);
             if (tblProveedor == null)
             {
                 return NotFound();
             }
-
+            ViewBag.Titulo = "Proveedores";
             return View(tblProveedor);
         }
 
         // GET: Proveedors/Create
         public IActionResult Create()
         {
+            ViewBag.Titulo = "Proveedores";
             return View();
         }
 
@@ -57,26 +59,28 @@ namespace SALT_PEPER.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tblProveedor);
-                await _context.SaveChangesAsync();
+               var x= _context.Add(tblProveedor);
+               
                 return RedirectToAction(nameof(Index));
             }
+           
             return View(tblProveedor);
         }
 
         // GET: Proveedors/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var tblProveedor = await _context.TblProveedor.FindAsync(id);
+            var tblProveedor =  _context.GetById(id);
             if (tblProveedor == null)
             {
                 return NotFound();
             }
+            ViewBag.Titulo = "Proveedores";
             return View(tblProveedor);
         }
 
@@ -97,7 +101,7 @@ namespace SALT_PEPER.Controllers
                 try
                 {
                     _context.Update(tblProveedor);
-                    await _context.SaveChangesAsync();
+                  
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -116,20 +120,20 @@ namespace SALT_PEPER.Controllers
         }
 
         // GET: Proveedors/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var tblProveedor = await _context.TblProveedor
-                .FirstOrDefaultAsync(m => m.Pk == id);
+            var tblProveedor =  _context.GetById(id);
+               
             if (tblProveedor == null)
             {
                 return NotFound();
             }
-
+            ViewBag.Titulo = "Proveedores";
             return View(tblProveedor);
         }
 
@@ -138,15 +142,15 @@ namespace SALT_PEPER.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var tblProveedor = await _context.TblProveedor.FindAsync(id);
-            _context.TblProveedor.Remove(tblProveedor);
-            await _context.SaveChangesAsync();
+            var tblProveedor =  _context.GetById(id);           
+             _context.Delete(id);
             return RedirectToAction(nameof(Index));
         }
 
         private bool TblProveedorExists(int id)
         {
-            return _context.TblProveedor.Any(e => e.Pk == id);
+            var exist = _context.GetById(id);
+            return (exist != null) ? true : false;
         }
     }
 }

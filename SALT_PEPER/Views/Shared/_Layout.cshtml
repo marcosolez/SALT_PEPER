@@ -4,28 +4,63 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - SALT_PEPER</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link href="~/css/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/site.css" />
-    <script src="~/js/popper.min.js"></script>
+    <link href="~/assets/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/assets/css/icons.css" rel="stylesheet" />
+    <link href="~/assets/css/app.css" rel="stylesheet" />
+
 </head>
-<body>
-    <header>
+<body data-sidebar="dark">
+    <div id="layout-wrapper">
         <partial name="_MenuSuperior" />
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2022 - SALT_PEPER - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0 font-size-18">@ViewBag.Titulo</h4>                           
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/bootstrap.min.js"></script>
+
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <script>document.write(new Date().getFullYear())</script> © Skote.
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end d-none d-sm-block">
+                            Design & Develop by Themesbrand
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- JAVASCRIPT -->
+
+    <script src="~/assets/libs/jquery/jquery.min.js"></script>
+    <script src="~/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/assets/libs/metismenu/metisMenu.min.js"></script>
+    <script src="~/assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/assets/libs/node-waves/waves.min.js"></script>
+
+    <!-- dashboard init -->
+    <script src="~/assets/js/pages/dashboard.init.js"></script>
+
+    <!-- App js -->
+    <script src="~/assets/js/app.js"></script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

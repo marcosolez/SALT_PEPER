@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SALT_PEPER.Models.TblCategoriaPlatillo>
+﻿@model IEnumerable<SALT_PEPER.ENTIDADES.TblCategoriaPlatillo>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,8 +6,8 @@
 
 <h4>Categoría platillo</h4>
 
-<div class="row justify-content-md-end">
-    <a asp-action="Create" class="btn btn-primary btn-sm align-content-end">
+<div class="button-items ">
+    <a asp-action="Create" class="btn btn-primary float-sm-end btn-sm waves-effect waves-light">
         <i class="fa fa-plus" aria-hidden="true"></i>
         Nuevo
     </a>
@@ -21,7 +21,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Estado)
             </th>
-            <th></th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -35,14 +35,14 @@
                     @Html.DisplayFor(modelItem => item.Estado)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Pk" class="btn btn-info btn-sm">
+                    <a asp-action="Edit" asp-route-id="@item.Pk" class="btn btn-primary btn-sm">
                         <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                         Editar
-                    </a> 
+                    </a>
                     <a asp-action="Details" asp-route-id="@item.Pk" class="btn btn-success btn-sm">
                         <i class="fa fa-eye" aria-hidden="true"></i>
                         Ver
-                    </a> 
+                    </a>
                     <a asp-action="Delete" asp-route-id="@item.Pk" class="btn btn-danger btn-sm">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                         Eliminar

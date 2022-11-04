@@ -1,16 +1,17 @@
-﻿@model SALT_PEPER.Models.TblProveedor
+﻿@model SALT_PEPER.ENTIDADES.TblProveedor
 
 @{
     ViewData["Title"] = "Create";
 }
 
 <h4>Crear proveedor</h4>
-<div class="row justify-content-md-end">
-    <a asp-action="Index" class="btn btn-info btn-sm">
-        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+<div class="button-items ">
+    <a asp-action="Index" class="btn btn-primary float-sm-end btn-sm waves-effect waves-light">
+        <i class="fa fa-backspace" aria-hidden="true"></i>
         Regresar
     </a>
 </div>
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">

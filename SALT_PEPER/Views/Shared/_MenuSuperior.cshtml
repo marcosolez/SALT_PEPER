@@ -1,29 +1,109 @@
-﻿<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">FAST FOOD</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Inicio</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Catálogos
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" asp-controller="UnidadMedida" asp-action="Index">Unidad de medida</a></li>
-                        <li><a class="dropdown-item" asp-controller="CategoriaPlatillo" asp-action="Index">Categoría platillo</a></li>
-                        <li><a class="dropdown-item" asp-controller="Proveedors" asp-action="Index">Proveedor</a></li>
+﻿<header id="page-topbar">
+    <div class="navbar-header">
+        <div class="d-flex">
+            <!-- LOGO -->
+            <div class="navbar-brand-box">
+                <a href="index.html" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo.svg" alt="" height="22">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-dark.png" alt="" height="17">
+                    </span>
+                </a>
 
-                    </ul>
-                </li>
-            </ul>
-            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                <partial name="_LoginPartial" />
+                <a href="index.html" class="logo logo-light">
+                    <span class="logo-sm">
+                        <i class="mdi mdi-food mdi-24px text-white"></i>
+                    </span>
+                    <span class="logo-lg">
+                        <strong class="text-white">FAST-FOOD</strong> 
+                        <i class="mdi mdi-food mdi-48px text-white"></i>
+                       
+                    </span>
+                </a>
+            </div>
+            <button type="button" class="btn btn-sm px-3 font-size-16 header-item waves-effect" id="vertical-menu-btn">
+                <i class="fa fa-fw fa-bars"></i>
+            </button>
+        </div>
+
+        <div class="d-flex">
+            <div class="dropdown d-inline-block d-lg-none ms-2">
+                <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="mdi mdi-magnify"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                     aria-labelledby="page-header-search-dropdown">
+                    <form class="p-3">
+                        <div class="form-group m-0">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Search ..." aria-label="Recipient's username">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-1.jpg"
+                         alt="Header Avatar">
+                    <span class="d-none d-xl-inline-block ms-1" key="t-henry">Cerrar sesión</span>
+                    <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end">
+                    <!-- item-->
+                    <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Perfil</span></a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item text-danger" href="#"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span key="t-logout">Salir</span></a>
+                </div>
             </div>
         </div>
     </div>
-</nav>
+</header>
+
+<!-- ========== Left Sidebar Start ========== -->
+<div class="vertical-menu">
+
+    <div data-simplebar class="h-100">
+
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title" key="t-menu">Menu</li>
+                <li>
+                    <a href="javascript: void(0);" class="waves-effect">
+                        <i class="bx bx-home-circle"></i>
+                        <span key="t-dashboards">Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Platillo" asp-action="Index" class="waves-effect">
+                        <i class="bx bx-restaurant"></i>
+                        <span key="t-dashboards">Platillos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bx-layout"></i>
+                        <span key="t-layouts">Mantenimientos</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a class="dropdown-item" asp-controller="UnidadMedida" asp-action="Index"><i class="bx bx-ruler"></i> Unidad de medida</a></li>
+                        <li><a class="dropdown-item" asp-controller="CategoriaPlatillo" asp-action="Index"> <i class="bx bx-food-menu"></i> Categoría platillo</a></li>
+                        <li><a class="dropdown-item" asp-controller="Proveedors" asp-action="Index"> <i class="bx bx-briefcase-alt "></i> Proveedor</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>
+<!-- Left Sidebar End -->
