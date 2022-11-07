@@ -18,6 +18,7 @@ namespace SALT_PEPER.ENTIDADES
         public int Pk { get; set; }
 
         [Required(ErrorMessage ="Campo requerido")]
+        [Display(Name ="Unidad de medida")]
         public string Nombre { get; set; }
         public bool Estado { get; set; }
 

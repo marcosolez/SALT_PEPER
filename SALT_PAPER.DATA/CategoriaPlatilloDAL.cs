@@ -2,11 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace SALT_PAPER.DATA
 {
-   public class CategoriaPlatilloDAL
+    public class CategoriaPlatilloDAL
     {
         FAST_FOOD_DBContext _context;
         public CategoriaPlatilloDAL()

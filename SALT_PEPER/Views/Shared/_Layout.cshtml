@@ -6,8 +6,10 @@
     <title>@ViewData["Title"] - SALT_PEPER</title>
     <link href="~/assets/css/bootstrap.css" rel="stylesheet" />
     <link href="~/assets/css/icons.css" rel="stylesheet" />
+    <link href="~/assets/libs/toastr/build/toastr.min.css" rel="stylesheet" />
+    <link href="~/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
     <link href="~/assets/css/app.css" rel="stylesheet" />
-
+    @RenderSection("Styles", required: false)
 </head>
 <body data-sidebar="dark">
     <div id="layout-wrapper">
@@ -54,9 +56,10 @@
     <script src="~/assets/libs/metismenu/metisMenu.min.js"></script>
     <script src="~/assets/libs/simplebar/simplebar.min.js"></script>
     <script src="~/assets/libs/node-waves/waves.min.js"></script>
-
+    <script src="~/assets/libs/toastr/build/toastr.min.js"></script>
+    <script src="~/assets/libs/sweetalert2/sweetalert2.min.js"></script>
     <!-- dashboard init -->
-    <script src="~/assets/js/pages/dashboard.init.js"></script>
+   
 
     <!-- App js -->
     <script src="~/assets/js/app.js"></script>

@@ -12,11 +12,15 @@ namespace SALT_PEPER.Controllers
     {
         private readonly PlatilloBAL _context;
         private readonly CategoriaPlatilloBAL _contextCat;
+        private readonly IngredienteBAL _contextIngrediente;
+        private readonly UnidadesMedidaBAL _contextUnidMedida;
 
         public PlatilloController()
         {
             _context = new PlatilloBAL();
             _contextCat = new CategoriaPlatilloBAL();
+            _contextIngrediente = new IngredienteBAL();
+            _contextUnidMedida = new UnidadesMedidaBAL();
         }
         public IActionResult Index()
         {
@@ -29,6 +33,9 @@ namespace SALT_PEPER.Controllers
         {         
             ViewBag.Titulo = "Creación de platillos y bebidas";
             ViewBag.ListCategorias = _contextCat.GetAllActive();
+            ViewBag.ListIngrediente= _contextIngrediente.GetAllActive();
+            ViewBag.ListUnidadMedida = _contextUnidMedida.GetAll().Where(x=>x.Estado).ToList();
+            
             if (id==null)
                 return View(new TblPlatilloBebida());
 
