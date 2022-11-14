@@ -420,6 +420,9 @@ namespace SALT_PEPER.Models
                     .HasColumnName("PRECIO")
                     .HasColumnType("money");
 
+                entity.Property(e => e.Estado)
+                .HasColumnName("ESTADO");
+
                 entity.HasOne(d => d.FkcategoriaplatilloNavigation)
                     .WithMany(p => p.TblPlatilloBebida)
                     .HasForeignKey(d => d.Fkcategoriaplatillo)

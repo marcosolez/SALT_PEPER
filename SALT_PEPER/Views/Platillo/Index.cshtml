@@ -33,7 +33,7 @@
             {
                 <tr>
                     <td>
-                        <img src="@item.Imagen" width="100" alt="" />
+                        <img src="images/@item.Imagen" width="100" alt="" />
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Nombre)
@@ -48,18 +48,18 @@
                         @Html.DisplayFor(modelItem => item.Precio)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Pk" class="btn btn-primary btn-sm">
+                        <a asp-action="CrearPlatillos" asp-route-id="@item.Pk" class="btn btn-primary btn-sm">
                             <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
                             Editar
                         </a>
-                        <a asp-action="Details" asp-route-id="@item.Pk" class="btn btn-success btn-sm">
+                        @*<a asp-action="Details" asp-route-id="@item.Pk" class="btn btn-success btn-sm">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                             Ver
                         </a>
                         <a asp-action="Delete" asp-route-id="@item.Pk" class="btn btn-danger btn-sm">
                             <i class="fa fa-trash" aria-hidden="true"></i>
                             Eliminar
-                        </a>
+                        </a>*@
                     </td>
                 </tr>
             }

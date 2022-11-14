@@ -1,4 +1,7 @@
-
+let JSONListadoIngredientes = [];
+const PK = Number($("#PK").val());
+let TIENEINGREDIENTE = $("#TIENEINGREDIENTE").is(':checked');// $("#ISBEBIDA").val();
+let isIngredientes = Boolean($("#isIngredientes").val());
 
 $(document).ready(function () {
     $(".select2").select2();
@@ -6,19 +9,215 @@ $(document).ready(function () {
         AgregarIngrediente();
     });
 
+
+    $("#TIENEINGREDIENTE").prop("checked", TIENEINGREDIENTE);
+
+
+    if (JSONPlatillo === null)
+        JSONPlatillo = [];
+
+    if (!isIngredientes)
+        $(".divIngredientes").fadeOut("slow");
+
+    if (JSONPlatillo.length > 0) {
+
+
+        JSONPlatillo.forEach(x => {
+
+            const objBuscado = selectIngrediente(x.fkingrediente);
+
+            JSONListadoIngredientes.push({
+                Pk: x.pk,
+                FkIngrediente: objBuscado.FkIngrediente,
+                Ingrediente: objBuscado.Ingrediente,
+                FkUnidadMedida: objBuscado.FkUnidadMedida,
+                UnidadMedida: objBuscado.UnidadMedida,
+                Cantidad: x.cantidadunidad
+            });
+        });
+        CrearFilas();
+    }
+
+    $("#chkEsBebida").change(function (e) {
+        const checked = $(this).is(':checked');
+       
+
+        if (JSONListadoIngredientes.length>0 && !checked) {            
+            toastr.warning("Elimine primero los ingredientes en la lista", "Advertencia");
+            $("#chkEsBebida").prop("checked", true);
+            $("#TIENEINGREDIENTE").trigger();
+            return;
+        }
+
+      
+        if (checked) {
+            $(".divIngredientes").fadeIn("slow");
+            TIENEINGREDIENTE = checked;
+        }
+
+        else {
+            $(".divIngredientes").fadeOut("slow");
+            TIENEINGREDIENTE = checked;
+        }
+
+    });
+
+
+
 });
 
-let JSONListadoIngredientes = [];
+$("#btnGuardar").click(function (e) {
+    e.preventDefault();
+
+
+    if (!ValidaGuardarPlatillo())
+        return;
+
+
+    const LISTADOINGREDIENTE = [];
+    JSONListadoIngredientes.forEach(x => {
+        LISTADOINGREDIENTE.push({
+            PK: x.Pk,
+            FKINGREDIENTE: Number(x.FkIngrediente),
+            CANTIDADUNIDAD: Number(x.Cantidad),
+            FKPLATILLO: PK
+        })
+    });
+
+    const platillosDTO = {
+        PK: Number($("#PK").val()),
+        NOMBRE: $("#NOMBRE").val(),
+        DESCRIPCION: $("#DESCRIPCION").val(),
+        PRECIO: Number($("#PRECIO").val()),
+        IMAGEN: $("#IMAGEN").val(),
+        FKCATEGORIAPLATILLO: Number($("#FKCATEGORIAPLATILLO").val()),
+        ESTADO: true,
+        LISTADOINGREDIENTE: LISTADOINGREDIENTE
+    }
+    // const data = JSON.stringify(platillosDTO);
+
+    ///Seccion par ala imagen
+
+
+
+    var formData = new FormData();
+    formData.append("PK", platillosDTO.PK);
+    formData.append("NOMBRE", platillosDTO.NOMBRE);
+    formData.append("DESCRIPCION", platillosDTO.DESCRIPCION);
+    formData.append("PRECIO", platillosDTO.PRECIO);
+    formData.append("FKCATEGORIAPLATILLO", platillosDTO.FKCATEGORIAPLATILLO);
+    formData.append("IMAGEN", platillosDTO.IMAGEN);
+
+    var fileUpload = $("#Files").get(0);
+    var files = fileUpload.files;
+    for (var i = 0; i < files.length; i++)
+        formData.append('Files', files[i]);
+
+    let cont = 0;
+    LISTADOINGREDIENTE.forEach(x => {
+        formData.append("LISTADOINGREDIENTE[" + cont + "].PK", x.PK);
+        formData.append("LISTADOINGREDIENTE[" + cont + "].FKINGREDIENTE", x.FKINGREDIENTE);
+        formData.append("LISTADOINGREDIENTE[" + cont + "].FKPLATILLO", x.FKPLATILLO);
+        formData.append("LISTADOINGREDIENTE[" + cont + "].CANTIDADUNIDAD", x.CANTIDADUNIDAD);
+        //
+        cont++;
+    });
+
+
+    $.ajax({
+        url: '/Platillo/GuardaActualizaPlatillo',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (resp) {
+            if (resp.data) {
+                Swal.fire(
+                    'Registro guardado satisfactoriamente',
+                    '',
+                    'success'
+                ).then(function (x) {
+                    window.location = "/Platillo";
+                });
+
+                //  window.location = "Platillo/Index";
+            }
+        },
+        error: function (jqXhr, textStatus, errorThrown) {
+            Swal.fire(
+                'Error al guardar el registro',
+                '',
+                'error'
+            )
+        },
+        complete: function (e) {
+
+        }
+    });
+
+});
+
+function ValidaGuardarPlatillo() {
+
+    console.log("TIENEINGREDIENTE", TIENEINGREDIENTE);
+    if (!$("#formPlatillo").valid()) {
+        return false;
+    }
+
+    let isValid = true;
+    if (JSONListadoIngredientes.length === 0 && TIENEINGREDIENTE) {
+        toastr.warning("Debe de agregar al menos un ingrediente", "Información faltante");
+        isValid = false;
+    }
+    return isValid;
+}
+
+
 
 function AgregarIngrediente() {
+    const valIngrediente = $("#FkIngrediente").val();
+    const valCantidad = $("#txtCantidadPorUnidad").val();
+
+    let IsValid = true;
+    if (valIngrediente === "") {
+        $("#valiIngrediente").text("Campo requerido");
+        IsValid = false;
+    } else {
+        $("#valiIngrediente").text("");
+    }
+    if (valCantidad === "") {
+        $("#valiCantidad").text("Campo requerido");
+        IsValid = false;
+    }
+    else {
+        $("#valiCantidad").text("");
+    }
+    if (Number(valCantidad) <= 0) {
+        $("#valiCantidad").text("La cantidad debe ser mayor a  0");
+        IsValid = false;
+    }
+    else {
+        $("#valiCantidad").text("");
+    }
+    if (!IsValid) {
+        return;
+    } else {
+        $("#valiIngrediente").text("");
+        $("#valiCantidad").text("");
+        $("#valiCantidad").text("");
+    }
+
+
+
     const PKIngrediente = Number($("#FkIngrediente").val());
     if (VerificaSiExisteIngrediente(PKIngrediente)) {
-        toastr.warning("Duplicado", "El ingrediente ya existe")
+        toastr.warning("El ingrediente ya existe", "Duplicado");
         return;
     }
 
     const objBuscado = selectIngrediente(PKIngrediente);
     var obj = {
+        PK: 0,
         FkIngrediente: objBuscado.FkIngrediente,
         Ingrediente: objBuscado.Ingrediente,
         FkUnidadMedida: objBuscado.FkUnidadMedida,
@@ -27,6 +226,9 @@ function AgregarIngrediente() {
     }
     JSONListadoIngredientes.push(obj);
     CrearFilas();
+    $("#FkIngrediente").val("");
+    $("#txtCantidadPorUnidad").val("");
+    $(".select2").select2();
 }
 
 function selectIngrediente(id) {
@@ -91,7 +293,7 @@ toastr.options = {
     "debug": false,
     "newestOnTop": false,
     "progressBar": false,
-    "positionClass": "toast-top-center",
+    "positionClass": "toast-bottom-center",
     "preventDuplicates": false,
     "onclick": null,
     "showDuration": "300",
@@ -105,49 +307,15 @@ toastr.options = {
 }
 
 
-!function (t) {
-    "use strict"; function e() { } e.prototype.init = function () {
-        t("#sa-basic").on("click", function () {
-            Swal.fire({ title: "Any fool can use a computer", confirmButtonColor: "#556ee6" })
-        }),
-            t("#sa-title").click(function () {
-                Swal.fire({ title: "The Internet?", text: "That thing is still around?", icon: "question", confirmButtonColor: "#556ee6" })
-            }), t("#sa-success").click(function () {
-                Swal.fire({
-                    title: "Good job!",
-                    text: "You clicked the button!",
-                    icon: "success", showCancelButton: !0,
-                    confirmButtonColor: "#556ee6",
-                    cancelButtonColor: "#f46a6a"
-                })
-            }),
-            t("#sa-warning").click(function () {
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You won't be able to revert this!",
-                    icon: "warning",
-                    showCancelButton: !0,
-                    confirmButtonColor: "#34c38f",
-                    cancelButtonColor: "#f46a6a",
-                    confirmButtonText: "Yes, delete it!"
-                }).then(function (t) {
-                    t.value && Swal.fire("Deleted!", "Your file has been deleted.", "success")
-                })
-            }), t("#sa-params").click(function () { Swal.fire({ title: "Are you sure?", text: "You won't be able to revert this!", icon: "warning", showCancelButton: !0, confirmButtonText: "Yes, delete it!", cancelButtonText: "No, cancel!", confirmButtonClass: "btn btn-success mt-2", cancelButtonClass: "btn btn-danger ms-2 mt-2", buttonsStyling: !1 }).then(function (t) { t.value ? Swal.fire({ title: "Deleted!", text: "Your file has been deleted.", icon: "success" }) : t.dismiss === Swal.DismissReason.cancel && Swal.fire({ title: "Cancelled", text: "Your imaginary file is safe :)", icon: "error" }) }) }), t("#sa-image").click(function () { Swal.fire({ title: "Sweet!", text: "Modal with a custom image.", imageUrl: "assets/images/logo-dark.png", imageHeight: 20, confirmButtonColor: "#556ee6", animation: !1 }) }), t("#sa-close").click(function () { var t; Swal.fire({ title: "Auto close alert!", html: "I will close in <strong></strong> seconds.", timer: 2e3, confirmButtonColor: "#556ee6", onBeforeOpen: function () { Swal.showLoading(), t = setInterval(function () { Swal.getContent().querySelector("strong").textContent = Swal.getTimerLeft() }, 100) }, onClose: function () { clearInterval(t) } }).then(function (t) { t.dismiss === Swal.DismissReason.timer && console.log("I was closed by the timer") }) }), t("#custom-html-alert").click(function () { Swal.fire({ title: "<i>HTML</i> <u>example</u>", icon: "info", html: 'You can use <b>bold text</b>, <a href="//Themesbrand.in/">links</a> and other HTML tags', showCloseButton: !0, showCancelButton: !0, confirmButtonClass: "btn btn-success", cancelButtonClass: "btn btn-danger ml-1", confirmButtonColor: "#47bd9a", cancelButtonColor: "#f46a6a", confirmButtonText: '<i class="fas fa-thumbs-up me-1"></i> Great!', cancelButtonText: '<i class="fas fa-thumbs-down"></i>' }) }), t("#sa-position").click(function () { Swal.fire({ position: "top-end", icon: "success", title: "Your work has been saved", showConfirmButton: !1, timer: 1500 }) }), t("#custom-padding-width-alert").click(function () { Swal.fire({ title: "Custom width, padding, background.", width: 600, padding: 100, confirmButtonColor: "#556ee6", background: "#fff url(//subtlepatterns2015.subtlepatterns.netdna-cdn.com/patterns/geometry.png)" }) }), t("#ajax-alert").click(function () { Swal.fire({ title: "Submit email to run ajax request", input: "email", showCancelButton: !0, confirmButtonText: "Submit", showLoaderOnConfirm: !0, confirmButtonColor: "#556ee6", cancelButtonColor: "#f46a6a", preConfirm: function (n) { return new Promise(function (t, e) { setTimeout(function () { "taken@example.com" === n ? e("This email is already taken.") : t() }, 2e3) }) }, allowOutsideClick: !1 }).then(function (t) { Swal.fire({ icon: "success", title: "Ajax request finished!", html: "Submitted email: " + t, confirmButtonColor: "#556ee6" }) }) }), t("#chaining-alert").click(function () {
-                Swal.mixin({ input: "text", confirmButtonText: "Next &rarr;", showCancelButton: !0, confirmButtonColor: "#556ee6", cancelButtonColor: "#74788d", progressSteps: ["1", "2", "3"] }).queue([{ title: "Question 1", text: "Chaining swal2 modals is easy" },
-                    "Question 2", "Question 3"]).then(function (t) {
-                        t.value && Swal.fire({ title: "All done!", html: "Your answers: <pre><code>" + JSON.stringify(t.value) + "</code></pre>", confirmButtonText: "Lovely!", confirmButtonColor: "#556ee6" })
-                    })
-            }), t("#dynamic-alert").click(function () {
-                swal.queue([{
-                    title: "Your public IP", confirmButtonColor: "#556ee6", confirmButtonText: "Show my public IP", text: "Your public IP will be received via AJAX request", showLoaderOnConfirm: !0, preConfirm: function () {
-                        return new Promise(function (e) {
-                            t.get("https://api.ipify.org?format=json").done(function (t) {
-                                swal.insertQueueStep(t.ip), e()
-                            })
-                        })
-                    }
-                }]).catch(swal.noop)
-            })
-    }, t.SweetAlert = new e, t.SweetAlert.Constructor = e
-}(window.jQuery), function () { "use strict"; window.jQuery.SweetAlert.init() }();
+
+$('#Files').change(function () {
+    const file = this.files[0];
+    console.log(file);
+    if (file) {
+        let reader = new FileReader();
+        reader.onload = function (event) {
+            $('#imgPreview').attr('src', event.target.result);
+        }
+        reader.readAsDataURL(file);
+    }
+});

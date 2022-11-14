@@ -21,6 +21,8 @@ namespace SALT_PEPER.Models
         public decimal Precio { get; set; }
         public string Imagen { get; set; }
         public int? Fkcategoriaplatillo { get; set; }
+        public bool? Estado { get; set; }
+     
 
         public virtual TblCategoriaPlatillo FkcategoriaplatilloNavigation { get; set; }
         public virtual ICollection<TblDetallePedido> TblDetallePedido { get; set; }

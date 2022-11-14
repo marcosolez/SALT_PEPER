@@ -1,112 +1,146 @@
-﻿@model TblPlatilloBebida
+﻿@model PlatillosDTO
 
-@{ 
+@{
     var ListaIngredientes = (List<TblIngrediente>)ViewBag.ListIngrediente;
     var ListUnidadMedida = (List<TblUnidadMedida>)ViewBag.ListUnidadMedida;
+    var JSONPlatillo = (List<IngredinetesDTO>)ViewBag.ListIngredientes;
 }
 @section Styles{
     <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
     @*  <link href="~/assets/libs/select2/nuevo/select2.min.css" rel="stylesheet" />*@
 }
 
-<div class="row">
-    <div class="col-lg-12">
-        <div id="basic-example">
-            <!-- Secciónn de detalles -->
-            <h3> <i class="bx bx-restaurant bx-sm"></i> Informacion del platillo</h3>
-            <section class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label>Nombre del platillo:</label>
-                        <input asp-for="Nombre" class="form-control" />
-                        <span asp-validation-for="Nombre" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mt-2">
-                        <label>Descripción del platillo:</label>
-                        <textarea asp-for="Descripcion" rows="3" class="form-control"></textarea>
-                        <span asp-validation-for="Descripcion" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mt-2">
-                        <label>Categoría del platillo:</label>
-                        @Html.DropDownList("Fkcategoriaplatillo", new SelectList(ViewBag.ListCategorias, "Pk", "Nombre"), "-- Seleccione una categoría--", new { @class = "form-control-lg select2", style = "width:100%" })
-                        <span asp-validation-for="Fkcategoriaplatillo" class="text-danger"></span>
-                    </div>
-                    <div class="form-group mt-2">
-                        <label>Precio:</label>
-                        <input asp-for="Precio" class="form-control" />
-                        <span asp-validation-for="Precio" class="text-danger"></span>
-                    </div>
+
+<div class="button-items ">
+    <a asp-action="Index" class="btn btn-primary float-sm-end btn-sm waves-effect waves-light">
+        <i class="fa fa-backspace" aria-hidden="true"></i>
+        Regresar
+    </a>
+</div>
+
+<section class="row ">
+    <div class="col-md-12 mt-3">
+
+        <h3>Información del platillo</h3>
+        <hr />
+    </div>
+</section>
+
+
+
+<form id="formPlatillo" enctype="multipart/form-data">
+    <input type="hidden" asp-for="PK" />
+    <input type="hidden" asp-for="ESTADO" />
+    <input type="hidden" asp-for="IMAGEN" />
+    <input type="hidden" id="isIngredientes" value="@Model.TIENEINGREDIENTE" />
+    <section class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label>Nombre del platillo:</label>
+                <input asp-for="NOMBRE" class="form-control" />
+                <span asp-validation-for="NOMBRE" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Descripción del platillo:</label>
+                <textarea asp-for="DESCRIPCION" rows="3" class="form-control"></textarea>
+                <span asp-validation-for="DESCRIPCION" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group mt-2">
+                <label>Categoría del platillo:</label>
+                @Html.DropDownList("FKCATEGORIAPLATILLO", new SelectList(ViewBag.ListCategorias, "Pk", "Nombre"), "-- Seleccione una categoría--", new { @class = "form-control-lg select2", style = "width:100%" })
+                <span asp-validation-for="FKCATEGORIAPLATILLO" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2">
+                <label>Precio:</label>
+                <input asp-for="PRECIO" type="number" class="form-control" />
+                <span asp-validation-for="PRECIO" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-check form-switch form-switch-lg mb-3" dir="ltr">
+                <input asp-for="TIENEINGREDIENTE" class="form-check-input" type="checkbox" id="chkEsBebida">
+                <label class="form-check-label" for="chkEsBebida">¿Tiene ingredientes?</label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group text-center">
+
+                <img id="imgPreview" src="~/images/@Model.IMAGEN" width="200" />
+
+                <div class="mt-3">
+                    <label for="formFile" class="form-label">Seleccione una imagen</label>
+                    <input asp-for="Files" class="form-control" />
+
                 </div>
-                <div class="col-md-6">
-                    <div class="form-group text-center">
-                        <img src="~/images/image-preview.png" />
+            </div>
+        </div>
+    </section>
 
-                        <div class="mt-3">
-                            <label for="formFile" class="form-label">Seleccione una imagen</label>
-                            <input class="form-control" type="file" id="formFile">
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!-- Seccion de ingredientes -->
-            <h3> <i class="mdi mdi-food-variant mdi-18px"></i> Ingredientes del platillo</h3>
-            <section>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="mb-3">
-                            <label>Ingrediente:</label>
-                            @Html.DropDownList("FkIngrediente", new SelectList(ViewBag.ListIngrediente, "Pk", "Nombre"), "-- Seleccione una categoría--", new { @class = "form-control-lg select2", style = "width:100%" })
-                            <span asp-validation-for="Fkcategoriaplatillo" class="text-danger"></span>
-                        </div>
-                    </div>
+    <section class="row divIngredientes">
+        <div class="col-md-12 mt-3">
+            <hr />
+            <h3>Ingredientes</h3>
+        </div>
+    </section>
 
-                    <div class="col-lg-4">
-                        <div class="mb-3">
-                            <label>Cantidad por unidad:</label>
-                            <input type="number" id="txtCantidadPorUnidad" class="form-control" />
-                        </div>
-                    </div>
+    <section class="row divIngredientes">
+        <div class="col-lg-4">
+            <div class="mb-3">
+                <label>Ingrediente:</label>
+                @Html.DropDownList("FkIngrediente", new SelectList(ViewBag.ListIngrediente, "Pk", "Nombre"), "-- Seleccione una categoría--", new { @class = "form-control-lg select2", style = "width:100%" })
+                <span id="valiIngrediente" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="mb-3">
+                <label>Cantidad por unidad:</label>
+                <input type="number" id="txtCantidadPorUnidad" class="form-control" />
+                <span id="valiCantidad" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="mb-3">
+                <button id="btnAgregarIngrediente" type="button" class="btn btn-primary mt-4"> <i class="fa fa-plus"></i> Agregar</button>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h3></h3>
+            <hr />
+            <div class="table-responsive">
+                <table class="table mb-0">
 
-                    <div class="col-lg-4">
-                        <div class="mb-3">
-                            <button id="btnAgregarIngrediente" type="button" class="btn btn-primary mt-4"> <i class="fa fa-plus"></i> Agregar</button>
-                        </div>
-                    </div>
-                </div>
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Ingrediente</th>
+                            <th>Unidad de medida</th>
+                            <th>Cantidad</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyIngredientes">
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3></h3>
-                        <hr />
-                        <div class="table-responsive">
-                            <table class="table mb-0">
-
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Ingrediente</th>
-                                        <th>Unidad de medida</th>
-                                        <th>Cantidad</th>
-                                        <th>Acción</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="bodyIngredientes">                                                     
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </section>
+    </section>
+    <br />
+    <div class="row">
+        <div class="col-md-12 ">
+            <button id="btnGuardar" class="btn btn-primary float-end"> <i class=" fa fa-save"></i> Guardar platillo</button>
         </div>
     </div>
-</div>
+</form>
+
 @section Scripts{
-    <script src="~/assets/libs/jquery-steps/build/jquery.steps.min.js"></script>
-    <script src="~/assets/js/pages/form-wizard.init.js"></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src="~/assets/libs/select2/js/select2.min.js"></script>
     <script>
-        var JSONIngrediente = @Json.Serialize(ListaIngredientes); 
-        var JSONUnidadMedida = @Json.Serialize(ListUnidadMedida);      
+        var JSONIngrediente = @Json.Serialize(ListaIngredientes);
+        var JSONUnidadMedida = @Json.Serialize(ListUnidadMedida);
+        var JSONPlatillo = @Json.Serialize(JSONPlatillo);
     </script>
     <script src="~/assets/js/app/platillo.js"></script>
 }
