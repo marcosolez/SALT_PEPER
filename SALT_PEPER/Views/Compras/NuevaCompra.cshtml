@@ -1,0 +1,213 @@
+﻿@model CompraDTO
+@{
+    var ListaProveedores = (List<TblProveedor>)ViewBag.Proveedores;
+    var ListaIngredientes = (List<TblIngrediente>)ViewBag.ListIngrediente;
+    var ListUnidadMedida = (List<TblUnidadMedida>)ViewBag.ListUnidadMedida;
+    var isEditable = (Model.PK == 0) ? true : false;
+
+    var JSONProductos= (List<DetalleCompraDTO>)ViewBag.ListCompras;
+}
+
+<h5>Información general</h5>
+<hr /><div class="button-items ">
+    <a asp-action="Index" class="btn btn-primary float-sm-end btn-sm waves-effect waves-light">
+        <i class="fa fa-backspace" aria-hidden="true"></i>
+        Regresar
+    </a>
+</div>
+
+
+<h4>Crear proveedor</h4>
+
+
+<form id="formCompra" enctype="multipart/form-data">
+    <input type="hidden" asp-for="PK" />
+    <input type="hidden" asp-for="ESTADO" />
+
+    <section class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Número de factura:</label>
+                @if (isEditable)
+                {
+                    <input asp-for="NUMFACTURA" class="form-control" />
+                }
+                else
+                {
+                    <input asp-for="NUMFACTURA" disabled class="form-control" />
+                }
+
+                <span asp-validation-for="NUMFACTURA" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Proveedor:</label>
+
+                @if (isEditable)
+                {
+                    @Html.DropDownList("FKPROVEEDOR", new SelectList(ListaProveedores, "Pk", "Nombre"), "-- Seleccione un proveedor--", new { @class = "form-control-lg select2", style = "width:100%" })
+
+                }
+                else
+                {
+                    @Html.DropDownList("FKPROVEEDOR", new SelectList(ListaProveedores, "Pk", "Nombre"), "-- Seleccione un proveedor--", new { @class = "form-control-lg select2", style = "width:100%", @disabled = "disabled" })
+                }
+
+
+                <span asp-validation-for="FKPROVEEDOR" class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Fecha compra:</label>
+                <input asp-for="FECHACOMPRA" disabled="disabled" rows="3" class="form-control" />
+                <span asp-validation-for="FECHACOMPRA" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Usuario:</label>
+                <input asp-for="USERNAME" disabled="disabled" class="form-control" />
+                <span asp-validation-for="USERNAME" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="col-md-12 mt-3">
+            <h5>Detalles de la compra</h5>
+            <hr />
+        </div>
+
+        <div class="col-md-4">
+            <div class="form-group mt-2">
+                <label>Producto:</label>
+                @if (isEditable)
+                {
+                    @Html.DropDownList("FKINGREDIENTE", new SelectList(ListaIngredientes, "Pk", "Nombre"), "-- Seleccione ingrediente--", new { @class = "form-control-lg select2", style = "width:100%" })
+                }
+                else
+                {
+                    @Html.DropDownList("FKINGREDIENTE", new SelectList(ListaIngredientes, "Pk", "Nombre"), "-- Seleccione ingrediente--", new { @class = "form-control-lg select2", style = "width:100%", @disabled = "disabled" })
+                }
+
+                <span id="valiIngrediente" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group mt-2">
+                <label>Cantidad:</label>
+
+                @if (isEditable)
+                {
+                    <input asp-for="CANTIDAD" id="txtCantidad" class="form-control" onkeypress="return filterFloat(event,this);" />
+                }
+                else
+                {
+                    <input asp-for="CANTIDAD" disabled id="txtCantidad" class="form-control" />
+                }
+                <span id="valiCantidad" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group mt-2">
+                <label>Precio:</label>
+
+                @if (isEditable)
+                {
+                    <input asp-for="PRECIO" id="txtPrecio" class="form-control" onkeypress="return filterFloat(event,this);" />
+                }
+                else
+                {
+                    <input asp-for="PRECIO" id="txtPrecio" disabled class="form-control" />}
+
+
+                <span id="valiPrecio" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group mt-2">
+                <label>SubTotal:</label>
+                <input type="text" id="txtSubTotal" disabled="disabled" class="form-control" />
+            </div>
+        </div>
+        <div class="col-md-2">
+
+            @if (isEditable)
+            {
+                <button id="btnAgregar" type="button" class="btn btn-primary mt-4"> <i class="fa fa-plus"></i>Agregar</button>
+            }
+            else
+            {
+                <button id="btnAgregar" disabled type="button" class="btn btn-primary mt-4"> <i class="fa fa-plus"></i>Agregar</button>
+            }
+
+        </div>
+    </section>
+
+
+    <div class="row">
+        <div class="col-md-12 mt-3">
+            <h5>Listado de compras</h5>
+        </div>
+        <div class="col-md-12">
+            <table class="table">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nº</th>
+                        <th>Producto</th>
+                        <th>Unidad medida</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>SubTotal</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyIngredientes"></tbody>
+
+                <tfoot class="table-info mt-2">
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <strong>Total:</strong>
+                        </td>
+                        <td>
+                            <strong id="txtTotal"></strong>
+                        </td>
+                        <td class="text-right">
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col-md-12 ">
+            @if (isEditable)
+            {
+                <button id="btnGuardar" class="btn btn-primary float-end"> <i class=" fa fa-save"></i> Guardar compra</button>
+            }
+            else
+            {
+                <button id="btnGuardar" disabled class="btn btn-primary float-end"> <i class=" fa fa-save"></i> Guardar compra</button>
+            }
+     
+        </div>
+    </div>
+</form>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <script>
+        var JSONIngrediente = @Json.Serialize(ListaIngredientes);
+        var JSONUnidadMedida = @Json.Serialize(ListUnidadMedida);
+        var JSONProductos = @Json.Serialize(JSONProductos);
+
+    </script>
+    <script src="~/assets/js/app/compra.js"></script>
+
+}

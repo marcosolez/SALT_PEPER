@@ -5,7 +5,7 @@ using System.Collections.Generic;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace SALT_PEPER.ENTIDADES
+namespace SCAFOLD.Model
 {
     public partial class TblCompra
     {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 // If you have enabled NRTs for your project, then un-comment the following line:
 // #nullable disable
 
-namespace SALT_PEPER.ENTIDADES
+namespace SCAFOLD.Model
 {
     public partial class FAST_FOOD_DBContext : DbContext
     {
@@ -41,7 +41,11 @@ namespace SALT_PEPER.ENTIDADES
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=.;Database=FAST_FOOD_DB;Trusted_Connection=True;MultipleActiveResultSets=true");
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=.;Database=FAST_FOOD_DB;Trusted_Connection=True;");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -163,7 +167,6 @@ namespace SALT_PEPER.ENTIDADES
 
             modelBuilder.Entity<TblCompra>(entity =>
             {
-
                 entity.HasKey(e => e.Pk);
 
                 entity.ToTable("Tbl_Compra");
@@ -221,7 +224,7 @@ namespace SALT_PEPER.ENTIDADES
                     .WithMany(p => p.TblDetalleCompra)
                     .HasForeignKey(d => d.Fkcompra)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Tbl_DetalleCompra_Tbl_Compra");
+                    .HasConstraintName("FK_Tbl_DetalleCompra_Tbl_Compra1");
 
                 entity.HasOne(d => d.FkingredienteNavigation)
                     .WithMany(p => p.TblDetalleCompra)
@@ -405,6 +408,8 @@ namespace SALT_PEPER.ENTIDADES
                     .HasMaxLength(500)
                     .IsUnicode(false);
 
+                entity.Property(e => e.Estado).HasColumnName("ESTADO");
+
                 entity.Property(e => e.Fkcategoriaplatillo).HasColumnName("FKCATEGORIAPLATILLO");
 
                 entity.Property(e => e.Imagen)
@@ -423,10 +428,6 @@ namespace SALT_PEPER.ENTIDADES
                     .HasColumnName("PRECIO")
                     .HasColumnType("money");
 
-                entity.Property(e => e.Estado)
-                   .HasColumnName("ESTADO");
-                   
-
                 entity.HasOne(d => d.FkcategoriaplatilloNavigation)
                     .WithMany(p => p.TblPlatilloBebida)
                     .HasForeignKey(d => d.Fkcategoriaplatillo)
@@ -435,7 +436,6 @@ namespace SALT_PEPER.ENTIDADES
 
             modelBuilder.Entity<TblProveedor>(entity =>
             {
-
                 entity.HasKey(e => e.Pk);
 
                 entity.ToTable("Tbl_Proveedor");

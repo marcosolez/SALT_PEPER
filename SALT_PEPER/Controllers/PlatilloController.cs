@@ -16,8 +16,9 @@ namespace SALT_PEPER.Controllers
     {
         private readonly PlatilloBAL _context;
         private readonly CategoriaPlatilloBAL _contextCat;
-        private readonly IngredienteBAL _contextIngrediente;
         private readonly UnidadesMedidaBAL _contextUnidMedida;
+        private readonly IngredienteBAL _contextIngrediente;
+       
         private readonly IHostingEnvironment Environment;
 
 
@@ -25,8 +26,9 @@ namespace SALT_PEPER.Controllers
         {
             _context = new PlatilloBAL();
             _contextCat = new CategoriaPlatilloBAL();
-            _contextIngrediente = new IngredienteBAL();
             _contextUnidMedida = new UnidadesMedidaBAL();
+            _contextIngrediente = new IngredienteBAL();
+            
             Environment = _environment;
         }
         public IActionResult Index()

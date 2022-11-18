@@ -79,9 +79,15 @@
             <ul class="metismenu list-unstyled" id="side-menu">
                 <li class="menu-title" key="t-menu">Menu</li>
                 <li>
-                    <a href="javascript: void(0);" class="waves-effect">
+                    <a asp-controller="Home" asp-action="Index" class="waves-effect">
                         <i class="bx bx-home-circle"></i>
                         <span key="t-dashboards">Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a asp-controller="Compras" asp-action="Index" class="waves-effect">
+                        <i class="mdi mdi-cart"></i>
+                        <span key="t-dashboards">Compras</span>
                     </a>
                 </li>
                 <li>

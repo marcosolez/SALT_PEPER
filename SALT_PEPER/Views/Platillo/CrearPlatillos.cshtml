@@ -95,7 +95,7 @@
         <div class="col-lg-4">
             <div class="mb-3">
                 <label>Cantidad por unidad:</label>
-                <input type="number" id="txtCantidadPorUnidad" class="form-control" />
+                <input type="number" id="txtCantidadPorUnidad" class="form-control" onkeypress="return filterFloat(event,this);" />
                 <span id="valiCantidad" class="text-danger"></span>
             </div>
         </div>
