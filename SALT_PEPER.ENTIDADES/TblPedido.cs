@@ -20,6 +20,8 @@ namespace SALT_PEPER.ENTIDADES
         public bool Anulado { get; set; }
         public string Username { get; set; }
 
+        public string Estadoorden { get; set; }
+
         public virtual ICollection<TblDetallePedido> TblDetallePedido { get; set; }
     }
 }

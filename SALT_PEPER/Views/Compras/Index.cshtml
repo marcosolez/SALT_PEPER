@@ -1,41 +1,48 @@
 ﻿@model List<TblCompra>
 
 
-    <div class="button-items ">
-        <a asp-action="NuevaCompra" class="btn btn-primary float-sm-end btn-sm waves-effect waves-light">
-            <i class="fa fa-plus" aria-hidden="true"></i>
-            Nuevo
-        </a>
+<div class="card">
+    <div class="card-body">
+
+        <h4>Listado de compras</h4>
+        <div class="button-items ">
+            <a asp-action="NuevaCompra" class="btn btn-primary float-sm-end btn-sm waves-effect waves-light">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Nuevo
+            </a>
+        </div>
+
+        <table class="table table-striped">
+            <thead class="table-light">
+                <tr>
+                    <th>Nº Factura</th>
+                    <th>Fecha compra</th>
+                    <th>Proveedor</th>
+                    <th>Usuario</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>  @item.Numfactura  </td>
+                        <td> @Convert.ToDateTime(@item.Fechacompra).ToShortDateString()  </td>
+                        <td>  @item.FkproveedorNavigation.Nombre  </td>
+                        <td>  @item.Username  </td>
+                        <td>  @item.Estado  </td>
+                        <td>
+                            <a asp-action="NuevaCompra" asp-route-id="@item.Pk" class="btn btn-success btn-sm">
+                                <i class="bx bx-cart-alt bx-sm" aria-hidden="true"></i>
+                                Ver
+                            </a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
     </div>
-
-<table class="table table-striped">
-    <thead class="table-light">
-        <tr>
-            <th>Nº Factura</th>
-            <th>Fecha compra</th>
-            <th>Proveedor</th>
-            <th>Usuario</th>
-            <th>Total</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-        <tr>
-            <td>  @item.Numfactura  </td>
-            <td> @Convert.ToDateTime(@item.Fechacompra).ToShortDateString()  </td>
-            <td>  @item.FkproveedorNavigation.Nombre  </td>
-            <td>  @item.Username  </td>
-            <td>  @item.Estado  </td>
-            <td>
-                <a asp-action="NuevaCompra" asp-route-id="@item.Pk" class="btn btn-success btn-sm">
-                    <i class="bx bx-cart-alt" aria-hidden="true"></i>
-                    Ver detalle
-                </a>
-            </td>
-        </tr>
-        }
-
-    </tbody>
-</table>
+</div>

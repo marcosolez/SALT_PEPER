@@ -12,6 +12,7 @@ namespace SCAFOLD.Model
         public int Pk { get; set; }
         public int Fkingrediente { get; set; }
         public double Cantidadstock { get; set; }
+        public DateTime? Fechaiultimoingreso { get; set; }
 
         public virtual TblIngrediente FkingredienteNavigation { get; set; }
     }

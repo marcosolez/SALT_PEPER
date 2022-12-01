@@ -45,8 +45,9 @@ namespace SALT_PAPER.DATA
                     _context.TblCompra.Add(compra);
                     _context.SaveChanges();
 
-                    //Agregabdo detalles
+                    //Agregando detalles
                     var detalles = new List<TblDetalleCompra>();
+                    var inventario = new List<TblInventario>();
 
                     foreach (var item in model.DETALLECOMPRADTO)
                     {
@@ -58,8 +59,16 @@ namespace SALT_PAPER.DATA
                             Precio = item.PRECIO,
                             Estado = true
                         });
-                    }
 
+                        var existeEnInventario = _context.TblInventario.FirstOrDefault(x => x.Fkingrediente == item.FKINGREDIENTE);
+
+                        if (existeEnInventario == null)
+                            inventario.Add(new TblInventario { Cantidadstock = item.CANTIDADUNIDAD, Fechaiultimoingreso = DateTime.Now, Fkingrediente = item.FKINGREDIENTE });
+                        else
+                            existeEnInventario.Cantidadstock += item.CANTIDADUNIDAD;
+                        
+                    }
+                    _context.TblInventario.AddRange(inventario);
                     _context.TblDetalleCompra.AddRange(detalles);
                     _context.SaveChanges();
 
@@ -72,11 +81,7 @@ namespace SALT_PAPER.DATA
                     tran.Rollback();
                     return false;
                 }
-
-
-            }
-        
-
+            }   
 
         }
 
@@ -86,6 +91,10 @@ namespace SALT_PAPER.DATA
                                  .Include(x => x.TblDetalleCompra)
                                  .Where(x => x.Pk == id)
                                  .FirstOrDefault();
+
+            if (compra==null)            
+                return new CompraDTO();
+            
 
             var compraDTO = new CompraDTO
             {

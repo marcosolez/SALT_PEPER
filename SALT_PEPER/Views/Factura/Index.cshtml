@@ -1,0 +1,177 @@
+﻿
+
+@{
+    var ListaPlatillos = (List<PlatillosDTO>)ViewBag.ListaPlatillos;
+}
+
+@section Styles{
+    <link href="~/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+
+}
+
+<div class="row">
+
+    <div class="col-md-3  mb-4">
+
+        <button class="btn btn-rounded btn-primary waves-light align-center text-uppercase" data-bs-toggle="modal" data-bs-target="#modalOrdenes">
+            <i class="fa fa-plus"></i> Nueva Orden
+        </button>
+
+    </div>
+    <div class="col-xl-9 ">
+        <div class="btn-group mt-2 mt-xl-0 float-end" role="group" aria-label="Basic checkbox toggle button group">
+
+            <input type="radio" class="btn-check" name="btnradio" onclick="verOrdenes('Todas')"  id="btncheck1" autocomplete="off" checked="">
+            <label class="btn btn-secondary" for="btncheck1"><i class="dripicons-archive"></i> Todas las ordenes</label>
+
+            <input type="radio" class="btn-check" name="btnradio" onclick="verOrdenes('Creadas')" id="btncheck2" autocomplete="off">
+            <label class="btn btn-secondary" for="btncheck2"> <i class="dripicons-clock "></i> Creadas</label>
+
+            <input type="radio" class="btn-check" name="btnradio" onclick="verOrdenes('Anuladas')"  id="btncheck3" autocomplete="off">
+            <label class="btn btn-secondary" for="btncheck3"> <i class="dripicons-wrong"></i> Anuladas</label>
+
+            <input type="radio" class="btn-check" name="btnradio"  onclick="verOrdenes('Finalizadas')" id="btncheck4" autocomplete="off">
+            <label class="btn btn-secondary" for="btncheck4"><i class="dripicons-checkmark"></i> Finalizadas</label>
+
+        </div>
+    </div>
+
+
+    <div id="divBackGround" class="col-md-12" style="background-image: url('../images/back2.jpg'); background-repeat:no-repeat; background-size:cover; width:100%; height:600px;">
+    </div>
+
+    <div id="divListOrdenes" class="row"></div>
+
+
+</div>
+
+
+<div id="modalOrdenes" class="modal fade" data-bs-backdrop="static" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalLabel">Órdenes</h5>
+
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="avatar-md profile-user-wid">
+                            <img id="imgPlatillo" src="~/images/image-preview.png" alt="" class="img-thumbnail rounded-circle" />
+
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-1">
+                        <div class="form-group">
+                            <strong>A nombre de:</strong>
+                            <input id="txtNombreCliente" type="text" placeholder="Nombre del cliente" class="form-control" />
+                            <span class="text-danger" id="spanValidateName"></span>
+                        </div>
+                        <div class="form-group">
+                            <strong>Orden:</strong>
+                            @Html.DropDownList("FKPLATILLO", new SelectList(ListaPlatillos, "PK", "NOMBRE"), "-- Seleccione la orden--", new { @class = "form-control-lg select2", style = "width:100%" })
+                            <span id="validPlatillo" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mt-4">
+                            <label>Cantidad:</label>
+                            <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                <span class="input-group-btn input-group-prepend">
+                                    <button onclick="updateQuantity(-1)" class="btn btn-secondary bootstrap-touchspin-down" type="button">
+                                        <i class="fas fa-chevron-circle-down"></i>
+                                    </button>
+                                </span>
+                                <input data-toggle="touchspin" type="text" value="1" id="txtCantidad" readonly="readonly" class="form-control text-center font-size-12">
+                                <span class="input-group-btn input-group-append">
+                                    <button onclick="updateQuantity(1)" class="btn btn-primary bootstrap-touchspin-up" type="button">
+                                        <i class="fas fa-chevron-circle-up"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-sm-12">
+                        <div class="pt-4">
+                            <div class="row">
+                                <div class="col-2">
+
+                                    <p class="text-muted mb-0"><strong>Cantidad</strong> </p>
+                                    <h5 class="font-size-15" id="lblCantidad"></h5>
+                                </div>
+                                <div class="col-3">
+
+                                    <p class="text-muted mb-0"> <strong>Precio</strong> </p>
+                                    <h5 class="font-size-15" id="lblPrecio"></h5>
+                                </div>
+                                <div class="col-3">
+
+                                    <p class="text-muted mb-0"><strong>SubTotal</strong> </p>
+                                    <h5 class="font-size-15" id="lblSubtotal"></h5>
+                                </div>
+                                <div class="col-4">
+                                    <div class="d-grid gap-2 ">
+                                        <button id="btnAddOrden" type="button" class="btn btn-info waves-effect btn-label waves-light">
+                                            <i class="fas fa-cart-plus  label-icon"></i>
+                                            Agregar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <br />
+
+                        <div id="divMensaje" style="display:none" class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="mdi mdi-block-helper me-2"></i>
+                            <span id="txtMensaje"></span>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-nowrap align-middle table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th colspan="3">Listado de órdenes</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyOrdenes">
+                                </tbody>
+                                <tfoot id="footerOrdenes">
+
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button  type="button" id="btnCancelarOrden" class="btn btn-secondary waves-effect">Cancelar</button>
+                <button id="txtGuardarOrden" type="button" class="btn btn-primary waves-effect  waves-light">Generar Orden</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+
+
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script src="~/assets/libs/select2/js/select2.min.js"></script>
+    <script>
+        var JSONPlatillos = @Json.Serialize(ListaPlatillos);
+    </script>
+
+    <script src="~/assets/js/app/orden.js"></script>
+
+}

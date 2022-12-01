@@ -1,67 +1,75 @@
 ﻿
 @model IEnumerable<TblPlatilloBebida>
 
-    <div class="button-items ">
-        <a asp-action="CrearPlatillos" class="btn btn-primary float-sm-end btn-sm waves-effect waves-light">
-            <i class="bx bx-restaurant" aria-hidden="true"></i>
-            Nuevo
-        </a>
+    <div class="card">
+        <div class="card-body">
+
+            <h4>Listado de platillos</h4>
+          
+
+            <div class="button-items ">
+                <a asp-action="CrearPlatillos" class="btn btn-primary float-sm-end btn-sm waves-effect waves-light">
+                    <i class="bx bx-restaurant" aria-hidden="true"></i>
+                    Nuevo
+                </a>
+            </div>
+            <table class="table">
+                <thead class="table-light">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Imagen)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Nombre)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </th>
+                        <th>
+                            Categoría
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Precio)
+                        </th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="images/@item.Imagen" width="100" alt="" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Descripcion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FkcategoriaplatilloNavigation.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Precio)
+                            </td>
+                            <td>
+                                <a asp-action="CrearPlatillos" asp-route-id="@item.Pk" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    Editar
+                                </a>
+                                @*<a asp-action="Details" asp-route-id="@item.Pk" class="btn btn-success btn-sm">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                        Ver
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Pk" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                        Eliminar
+                                    </a>*@
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
-    <table class="table">
-        <thead class="table-light">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Imagen)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Nombre)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Descripcion)
-                </th>
-                <th>
-                    Categoría
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Precio)
-                </th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        <img src="images/@item.Imagen" width="100" alt="" />
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Descripcion)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.FkcategoriaplatilloNavigation.Nombre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Precio)
-                    </td>
-                    <td>
-                        <a asp-action="CrearPlatillos" asp-route-id="@item.Pk" class="btn btn-primary btn-sm">
-                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                            Editar
-                        </a>
-                        @*<a asp-action="Details" asp-route-id="@item.Pk" class="btn btn-success btn-sm">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
-                            Ver
-                        </a>
-                        <a asp-action="Delete" asp-route-id="@item.Pk" class="btn btn-danger btn-sm">
-                            <i class="fa fa-trash" aria-hidden="true"></i>
-                            Eliminar
-                        </a>*@
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>

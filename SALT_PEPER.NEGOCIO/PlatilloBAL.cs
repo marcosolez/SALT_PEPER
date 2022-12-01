@@ -31,5 +31,10 @@ namespace SALT_PEPER.NEGOCIO
             
             return _context.GuardaActualizaPlatillo(model);
         }
+
+        public List<PlatillosDTO> GetPlatilloPorParaSelect()
+        {
+            return _context.GetPlatilloPorParaSelect();
+        }
     }
 }

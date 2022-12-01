@@ -19,7 +19,7 @@ $(document).ready(function () {
                 FKINGREDIENTE: ingrediente.pk,
                 INGREDIENTE: ingrediente.nombre,
                 FKUNIDADMEDIDA: unidadMedida.pk,
-                UNIDADMEDIDA: x.nombre,
+                UNIDADMEDIDA: unidadMedida.nombre,
                 CANTIDADUNIDAD: Number(x.cantidadunidad),
                 PRECIO: Number(x.precio),
                 SUBTOTAL: Number(x.cantidadunidad) * Number(x.precio),
@@ -50,6 +50,25 @@ $("#btnGuardar").click(function (e) {
     if (!ValidaGuardarCompra())
         return;
 
+
+    Swal.fire({
+        title: "Guardar información",
+        text: "¿Está seguro que desea guardar esta compra?",
+        icon: "question",
+        showCancelButton: !0,
+        confirmButtonColor: "#a74bdf",
+        cancelButtonColor: "#f46a6a",
+        confirmButtonText: "Si, guardar",
+        cancelButtonText: "Cancelar"
+    }).then(function (t) {
+        if (t.isConfirmed) {
+            Guardar();
+        }
+    });   
+
+});
+
+function Guardar() {
     const obj = {
         PK: Number($("#PK").val()),
         NUMFACTURA: $("#NUMFACTURA").val(),
@@ -88,8 +107,7 @@ $("#btnGuardar").click(function (e) {
 
         }
     });
-
-});
+}
 
 function ValidaGuardarCompra() {
 

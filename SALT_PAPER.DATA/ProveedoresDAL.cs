@@ -72,7 +72,7 @@ namespace SALT_PAPER.DATA
         {
             try
             {
-                var model = _context.TblProveedor.FirstOrDefault(x => x.Pk == id);
+                var model = _context.TblProveedor.FirstOrDefault(x => x.Pk == id);               
                 model.Estado = false;
                 _context.SaveChanges();
                 return true;

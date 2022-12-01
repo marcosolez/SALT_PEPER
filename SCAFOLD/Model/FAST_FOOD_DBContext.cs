@@ -358,6 +358,10 @@ namespace SCAFOLD.Model
 
                 entity.Property(e => e.Cantidadstock).HasColumnName("CANTIDADSTOCK");
 
+                entity.Property(e => e.Fechaiultimoingreso)
+                    .HasColumnName("FECHAIULTIMOINGRESO")
+                    .HasColumnType("datetime");
+
                 entity.Property(e => e.Fkingrediente).HasColumnName("FKINGREDIENTE");
 
                 entity.HasOne(d => d.FkingredienteNavigation)
@@ -376,6 +380,11 @@ namespace SCAFOLD.Model
                 entity.Property(e => e.Pk).HasColumnName("PK");
 
                 entity.Property(e => e.Anulado).HasColumnName("ANULADO");
+
+                entity.Property(e => e.Estadoorden)
+                    .HasColumnName("ESTADOORDEN")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Fechapedido)
                     .HasColumnName("FECHAPEDIDO")

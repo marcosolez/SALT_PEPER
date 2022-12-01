@@ -4,56 +4,60 @@
     ViewData["Title"] = "Editar ingrediente";
 }
 
-<h4>Editar ingrediente</h4>
-<hr />
-<div class="button-items ">
-    <a asp-action="Index" class="btn btn-primary float-sm-end btn-sm waves-effect waves-light">
-        <i class="fa fa-backspace" aria-hidden="true"></i>
-        Regresar
-    </a>
+<div class="card">
+    <div class="card-body">
+        <h4>Editar ingrediente</h4>
+        <hr />
+        <div class="button-items ">
+            <a asp-action="Index" class="btn btn-primary float-sm-end btn-sm waves-effect waves-light">
+                <i class="fa fa-backspace" aria-hidden="true"></i>
+                Regresar
+            </a>
+        </div>
+
+        <form asp-action="Edit">
+            <div class="row">
+                <div class="col-md-4">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Pk" />
+                    <div class="form-group">
+                        <label asp-for="Nombre" class="control-label"></label>
+                        <input asp-for="Nombre" class="form-control" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label>Unidad de medida:</label>
+                        @Html.DropDownListFor(m => m.Fkunidadmedida, new SelectList(ViewBag.ListUnidad, "Pk", "Nombre", Model.Fkunidadmedida), "-- Seleccione unidad de medida--", new { @class = "form-control" })
+                        <span asp-validation-for="Fkunidadmedida" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mt-4">
+                        <input type="submit" value="Guardar" class="btn btn-primary" />
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label asp-for="Cantidadporunidad" class="control-label">Cantidad por unidad</label>
+                        <input asp-for="Cantidadporunidad" class="form-control" />
+                        <span asp-validation-for="Cantidadporunidad" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mt-2">
+                        <label asp-for="Minimostock" class="control-label">Stock mínimo</label>
+                        <input asp-for="Minimostock" class="form-control" />
+                        <span asp-validation-for="Minimostock" class="text-danger"></span>
+                    </div>
+                    <div class="form-group form-check mt-2">
+                        <label class="form-check-label">
+                            <input class="form-check-input" asp-for="Estado" /> @Html.DisplayNameFor(model => model.Estado)
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
-<form asp-action="Edit">
-    <div class="row">
-        <div class="col-md-4">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Pk" />
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
-                <input asp-for="Nombre" class="form-control" />
-                <span asp-validation-for="Nombre" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-2">
-                <label>Unidad de medida:</label>
-                @Html.DropDownListFor(m=>m.Fkunidadmedida,new SelectList(ViewBag.ListUnidad, "Pk", "Nombre", Model.Fkunidadmedida), "-- Seleccione unidad de medida--", new { @class = "form-control" })
-                <span asp-validation-for="Fkunidadmedida" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-4">
-                <input type="submit" value="Guardar" class="btn btn-primary" />
-            </div>
 
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <label asp-for="Cantidadporunidad" class="control-label">Cantidad por unidad</label>
-                <input asp-for="Cantidadporunidad" class="form-control" />
-                <span asp-validation-for="Cantidadporunidad" class="text-danger"></span>
-            </div>
-            <div class="form-group mt-2">
-                <label asp-for="Minimostock" class="control-label">Stock mínimo</label>
-                <input asp-for="Minimostock" class="form-control" />
-                <span asp-validation-for="Minimostock" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check mt-2">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="Estado" /> @Html.DisplayNameFor(model => model.Estado)
-                </label>
-            </div>
-        </div>
-    </div>
-</form>
-
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        }

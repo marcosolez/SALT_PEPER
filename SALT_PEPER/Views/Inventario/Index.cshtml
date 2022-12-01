@@ -1,0 +1,49 @@
+﻿@model IEnumerable<InventarioDTO>
+@{
+    int Cont = 0;
+}
+
+<div class="card">
+    <div class="card-body">
+
+        <h4>Listado de inventario</h4>
+        <br />
+        <table class="table">
+            <thead class="table-light">
+                <tr class="font-weight-bold">
+                    <td><strong> Nº</strong></td>
+                    <td><strong>Producto</strong></td>
+                    <td><strong>Unidad de medida</strong></td>
+                    <td><strong>Último ingreso</strong></td>
+                    <td><strong>Stock mínimo</strong></td>
+                    <td><strong>Cantidad en Stock</strong></td>
+                </tr>
+            </thead>
+            <thead>
+                @foreach (var item in Model)
+                {
+                    Cont++;
+                    <tr>
+                        <td>@Cont</td>
+                        <td><i class="fas fa-pizza-slice "> </i> <strong>@item.INGREDIENTE</strong> </td>
+                        <td> <i class="bx bx-ruler bx-sm"></i> @item.UNIDADMEDIDA</td>
+                        <td><i class="bx bx-calendar bx-sm "></i> @Convert.ToDateTime(item.FECHAACTUALIZACION).ToShortDateString()</td>
+                        <td class="text-center"> <i class="bx bx-sort-down bx-sm text-secondary"></i> <strong>@item.STOCKMINIMO</strong> </td>
+                        <td class="text-center">
+                            @if (item.STOCKMINIMO > item.STOCK)
+                            {
+                                <i class="bx bx-sort-up bx-sm text-danger"></i>
+                            }
+                            else
+                            {
+                                <i class="bx bx-sort-up bx-sm text-success"></i>
+                            }
+
+                            <strong>@item.STOCK</strong>
+                        </td>
+                    </tr>
+                }
+            </thead>
+        </table>
+    </div>
+</div>

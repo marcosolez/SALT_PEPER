@@ -23,6 +23,32 @@ namespace SALT_PAPER.DATA
             return listado;
         }
 
+        public List<PlatillosDTO> GetPlatilloPorParaSelect()
+        {
+           
+            var model = _context.TblPlatilloBebida.ToList();
+
+            if (model.Count == 0)
+                return new List<PlatillosDTO>();
+
+            var lista =new List<PlatillosDTO>();
+
+            foreach (var item in model)
+            {
+                lista.Add(new PlatillosDTO
+                {
+                    PK = item.Pk,
+                    NOMBRE = item.Nombre,
+                    PRECIO = item.Precio,
+                    DESCRIPCION = item.Descripcion,
+                    IMAGEN = item.Imagen
+                });
+            }
+
+            return lista;
+
+        }
+
         public PlatillosDTO ObtenerPlatilloBebida(int? pk)
         {
             var platillo = _context.TblPlatilloBebida
@@ -81,7 +107,7 @@ namespace SALT_PAPER.DATA
                 {
                     Ingredientes.Add(new TblIngredientePlatillo
                     {
-                        Pk=item.PK,
+                        Pk = item.PK,
                         Fkingrediente = item.FKINGREDIENTE,
                         Fkplatillo = Platillo.Pk,
                         Cantidadunidad = item.CANTIDADUNIDAD
@@ -103,17 +129,17 @@ namespace SALT_PAPER.DATA
 
                     else
                     {
-                        var listaIngredienteDelete = _context.TblIngredientePlatillo.Where(x => x.Fkplatillo == Platillo.Pk).ToList();  
-                        _context.TblIngredientePlatillo.RemoveRange(listaIngredienteDelete);                      
+                        var listaIngredienteDelete = _context.TblIngredientePlatillo.Where(x => x.Fkplatillo == Platillo.Pk).ToList();
+                        _context.TblIngredientePlatillo.RemoveRange(listaIngredienteDelete);
 
-          
+
                         //Actualizando Platillo
                         _context.TblPlatilloBebida.Update(Platillo);
                         //Agregando ingredientes
                         Ingredientes.ForEach(x => x.FkplatilloNavigation = null);
                         _context.TblIngredientePlatillo.AddRange(Ingredientes);
 
-                       
+
 
                     }
                     _context.SaveChanges();

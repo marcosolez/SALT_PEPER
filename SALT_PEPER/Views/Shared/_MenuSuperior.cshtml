@@ -84,10 +84,31 @@
                         <span key="t-dashboards">Inicio</span>
                     </a>
                 </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="fas fa-cash-register"></i>
+                        <span key="t-layouts">Órdenes</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a class="dropdown-item" asp-controller="Factura" asp-action="Index"><i class="fas fa-utensils"></i> Nueva orden</a></li>
+                        <li><a class="dropdown-item" asp-controller="Factura" asp-action="ListadoOrdenes"><i class="fas fa-boxes "></i> Listado de Ordenes</a></li>
+
+                    </ul>
+                </li>
+
                 <li>
                     <a asp-controller="Compras" asp-action="Index" class="waves-effect">
                         <i class="mdi mdi-cart"></i>
                         <span key="t-dashboards">Compras</span>
+                    </a>
+                </li>
+
+            
+                <li>
+                    <a asp-controller="Inventario" asp-action="Index" class="waves-effect">
+                        <i class="mdi mdi-align-vertical-bottom"></i>
+                        <span key="t-dashboards">Inventario</span>
                     </a>
                 </li>
                 <li>

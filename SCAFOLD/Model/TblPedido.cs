@@ -19,6 +19,7 @@ namespace SCAFOLD.Model
         public string Nombrecliente { get; set; }
         public bool Anulado { get; set; }
         public string Username { get; set; }
+        public string Estadoorden { get; set; }
 
         public virtual ICollection<TblDetallePedido> TblDetallePedido { get; set; }
     }
